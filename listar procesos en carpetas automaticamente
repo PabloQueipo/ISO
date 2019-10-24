@@ -1,0 +1,14 @@
+foreach($veces in 168)
+{
+    $fecha = (Get-Date).ToString("yyyy\\MM\\dd")
+    mkdir $fecha -Force
+
+    $hora = (Get-Date).Hour
+    New-Item -Name $hora -Path $fecha -ItemType Directory -Force
+
+    (Get-Process).Name > ([String]($fecha+"\"+$hora+"\procesos.txt"))
+    (Get-Service).Name > ([String]($fecha+"\"+$hora+"\servicios.txt"))
+    (Get-Process).Threads > ([String]($fecha+"\"+$hora+"\hilos.txt"))
+
+    Start-Sleep -Seconds 3600
+}
