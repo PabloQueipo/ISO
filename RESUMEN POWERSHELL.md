@@ -92,6 +92,27 @@
     }
     ```
     ```PowerShell
+    # Crear una carpeta con la fecha de hoy que contenga los procesos que se están ejecutando junto el número de hilos (solución mediante funciones)
+
+    function contarhilos ($proceso)
+    {
+        # Valores que necesita: proceso
+        # Valores que devuelve: hilos
+        (Get-Process -Name $proceso).Threads.Count
+    }
+
+    $fecha = (Get-Date).ToString("yyyyMMdd")
+    mkdir $fecha
+    cd $fecha
+
+    foreach($proceso in (Get-Process | select Name -Unique).name)
+    {
+        $proceso
+        mkdir $proceso -force
+        contarhilos $proceso
+    }
+    ```
+    ```PowerShell
     # Arrancar un servicio
     New-Service -Name "Tes2" -BinaryPathName '"C:\Program Files\MySQL\MySQL Server 5.1\bin\mysqld" --defaults-file="C:\Program Files\MySQL\MySQL Server 5.1\my.ini" MySQL'
 
@@ -123,6 +144,20 @@
     {
         mkdir $programa.ProviderName -Force
         $programa.Name >> ($programa.ProviderName+"\informacion.txt")
+    }
+    ```
+    ```PowerShell
+    # Crear carpetas para cada tipo de ProviderName y dentro de cada carpeta meter los paquetes de cada ProviderName (mediante funciones)
+
+    function clasificarporProviderName($programa)
+    {
+        $programa.Name >> ($programa.ProviderName+"\informacion.txt")
+    }
+
+    foreach($programa in Get-Package | select ProviderName, name)
+    {
+        mkdir $programa.ProviderName -Force
+        clasificarporProviderName $programa
     }
     ```
 - Tipos de sistemas operativos.
@@ -190,6 +225,48 @@
     {
         $proceso.Name | Out-File log.log -Append
         $proceso.threads.Count | Out-File log.log -Append
+    }
+    ```
+    ```PowerShell
+    # Almacenar el número de procesos que se están ejecutando y el número de hilos de cada proceso (mediante funciones, cutre)
+
+    function guardarnombre()
+    {
+        $proceso.Name | Out-File log.log -Append
+    }
+    function guardarhilos()
+    {
+        $proceso.threads.Count | Out-File log.log -Append
+    }
+
+    $procesos = gps
+    $procesos.count | Out-File log.log -Append
+
+    foreach($proceso in $procesos)
+    {
+        guardarnombre
+        guardarhilos
+    }
+    ```
+    ```PowerShell
+    # Almacenar el número de procesos que se están ejecutando y el número de hilos de cada proceso (mediante funciones)
+
+    function guardarnombre($proceso)
+    {
+        $proceso.Name | Out-File log.log -Append
+    }
+    function guardarhilos($proceso)
+    {
+        $proceso.threads.Count | Out-File log.log -Append
+    }
+
+    $procesos = gps
+    $procesos.count | Out-File log.log -Append
+
+    foreach($proceso in $procesos)
+    {
+        guardarnombre $proceso
+        guardarhilos $proceso
     }
     ```
   - Gestión: Aplicar filtros, asociar tareas en respuesta a ciertos eventos, etc.
