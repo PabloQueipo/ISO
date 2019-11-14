@@ -1,20 +1,35 @@
-# Instalación de software libre y propietario 
+# Instalación de software libre y propietario
 
 Estructura de un sistema informático. Monolítica. Jerárquica. Capas o anillos (ring). Máquinas virtuales. Cliente-servidor.
+https://github.com/jesusninoc/ClasesISO/blob/master/2019-09-17.md#n%C3%BAcleo
+Get-CimInstance Win32_OperatingSystem | select SerialNumber
+[System.Environment]::OSVersion.Version
+wsl uname -r
 Arquitectura de un sistema operativo. Sistemas por lotes (batch). Sistemas por lotes con multiprogramación. Sistemas de tiempo compartido. Sistemas distribuidos.
+https://www.jesusninoc.com/07/03/3-gestion-del-hardware-en-powershell/#Procesador
 Funciones de un sistema operativo.
 Controlar y gestionar el uso del hardware del ordenador: CPU, dispositivos de E/S, Memoria principal, tarjetas gráficas y el resto de periféricos.
-  https://www.jesusninoc.com/07/03/3-gestion-del-hardware-en-powershell/
-
+https://www.jesusninoc.com/07/03/3-gestion-del-hardware-en-powershell
+ Get-WmiObject win32_processor | Select-Object LoadPercentage
 Administrar la ejecución de los procesos. Planificación.
-  https://www.jesusninoc.com/07/07/7-gestion-de-procesos-en-powershell/
+https://www.jesusninoc.com/07/07/7-gestion-de-procesos-en-powershell/
+# Crear una carpeta con la fecha de hoy que contenga los procesos que se están ejecutando junto con información sobre los mismos (hilos)
+
+$fecha = (Get-Date).ToString("yyyyMMdd")
+mkdir $fecha
+cd $fecha
+
+mkdir (Get-Process | select Name -Unique).name
+
+foreach($carpeta in (Get-ChildItem).Name)
+{    $carpeta
+    (Get-Process -Name $carpeta).Threads >> ($carpeta+"\informacion.txt")
+}
+
+
 
 Controlar el proceso de organización de la información. Creación, acceso (ubicación física) y borrado de archivos.
-
-
 Controlar el acceso de los programas o los usuarios a los recursos del sistema.
-
-
 Proporcionar interfaces de usuario: en modo texto y gráficos.
 Servicios soporte: actualizaciones de software, controladores para nuevos periféricos, etc.
 Tipos de sistemas operativos.
