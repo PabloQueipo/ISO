@@ -58,6 +58,8 @@
   - Servicios soporte: actualizaciones de software, controladores para nuevos periféricos, etc.
     * https://www.jesusninoc.com/07/05/5-gestion-del-software-en-powershell/#Actualizaciones
     * https://www.jesusninoc.com/07/07/7-gestion-de-procesos-en-powershell/
+    * https://github.com/jesusninoc/ClasesISO/blob/master/2019-10-15.md#ver-actualizaciones
+    * https://github.com/jesusninoc/ClasesISO/blob/master/2019-10-15.md#obtener-informaci%C3%B3n-sobre-las-actualizaciones
     ```PowerShell
     # Crear carpetas para cada tipo de ProviderName y dentro de cada carpeta meter los paquetes de cada ProviderName
     
@@ -88,6 +90,7 @@
   - En sistemas Linux determinar las particiones para los distintos puntos de montaje.
   - Controladores (drivers) de almacenamiento necesarios.
     * https://github.com/jesusninoc/PowerShell/blob/master/Procesos/EjerciciosProcesosAvanzado.ps1
+    * https://github.com/jesusninoc/ClasesISO/blob/master/2019-10-15.md#ver-controladores 
 - Instalación de sistemas operativos.
   - Requisitos hardware, versiones y licencias.
     * https://www.jesusninoc.com/07/03/3-gestion-del-hardware-en-powershell/
@@ -109,6 +112,7 @@
   - Reparación del gestor de arranque.
   - Sustitución del gestor de arranque estándar por otro más completo.
 - Instalación/desinstalación de aplicaciones. Requisitos hardware y software, versiones y licencias.
+  * https://github.com/jesusninoc/ClasesISO/blob/master/2019-10-15.md#instalar-un-paquete-msi-junto-con-informaci%C3%B3n-sobre-la-instalaci%C3%B3n
 - Actualización de sistemas operativos y aplicaciones.
   - Actualizar a una versión superior (update).
   - Cambiar a una versión inferior (downgrade).
@@ -118,6 +122,19 @@
 - Registros (logs) del sistema.
   - Formato de los registros: fuente/origen, prioridades (informativos, advertencias, errores, etc.)
   - Herramientas para su monitorización en sistemas libres y propietarios.
+    * https://www.jesusninoc.com/07/10/10-gestion-del-rendimiento-en-powershell/#Registros_del_sistema
+    ```PowerShell
+    # Almacenar el número de procesos que se están ejecutando y el número de hilos de cada proceso
+
+    $procesos = gps
+    $procesos.count | Out-File log.log -Append
+
+    foreach($proceso in $procesos)
+    {
+        $proceso.Name | Out-File log.log -Append
+        $proceso.threads.Count | Out-File log.log -Append
+    }
+    ```
   - Gestión: Aplicar filtros, asociar tareas en respuesta a ciertos eventos, etc.
 - Actualización y mantenimiento de controladores de dispositivos.
   - Automatizar la actualización de controladores.
@@ -128,16 +145,25 @@
 - Sistemas de archivos:
   - Propietarios y libres.
   - Rutas y nombres de archivos. Estructura jerárquica.
+    * https://www.jesusninoc.com/07/04/4-gestion-del-sistema-de-archivos-en-powershell/#La_ruta
 - Gestión de sistemas de archivos mediante comandos y entornos gráficos.
 - Gestión de enlaces.
 - Estructura de directorios de sistemas operativos libres y propietarios.
 - Búsqueda de información del sistema mediante comandos y herramientas gráficas.
+  * https://github.com/jesusninoc/Bash/blob/master/Ficheros/EjerciciosFicherosBuscar.sh
 - Identificación del software instalado mediante comandos y herramientas gráficas.
+  * https://www.jesusninoc.com/07/05/5-gestion-del-software-en-powershell/
 - Gestión de la información del sistema. Rendimiento. Estadísticas.
 - Montaje y desmontaje de dispositivos en sistemas operativos. Automatización.
 - En sistemas Windows montar un volumen en una o más carpetas.
 - Herramientas de administración de discos. Particiones y volúmenes. Desfragmentación y chequeo.
 - Permisos locales de acceso a ficheros y directorios.
+  * https://github.com/jesusninoc/ClasesISO/blob/master/2019-11-05.md#permisos-en-linux
+  * https://github.com/jesusninoc/ClasesISO/blob/master/2019-11-07.md#permisos-en-linux
+  * https://www.jesusninoc.com/07/04/4-gestion-del-sistema-de-archivos-en-powershell/#Permisos-2
+  * https://github.com/jesusninoc/ClasesSOM/blob/master/2018-11-26.md
+  * https://github.com/jesusninoc/ClasesSOM/blob/master/2018-11-27.md
+  * https://www.jesusninoc.com/03/30/eliminar-permisos-explicitos/
 
 ---------------------
 
