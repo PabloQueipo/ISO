@@ -33,7 +33,10 @@
     }
     ```
   - Controlar el proceso de organización de la información. Creación, acceso (ubicación física) y borrado de archivos.
+     * https://www.jesusninoc.com/07/04/4-gestion-del-sistema-de-archivos-en-powershell/#Archivos
   - Controlar el acceso de los programas o los usuarios a los recursos del sistema.
+  ps -U root -u root u
+  ps -eo user,comm
   - Proporcionar interfaces de usuario: en modo texto y gráficos.
   - Servicios soporte: actualizaciones de software, controladores para nuevos periféricos, etc.
 - Tipos de sistemas operativos.
