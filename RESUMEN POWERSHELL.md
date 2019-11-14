@@ -4,9 +4,18 @@
   * https://github.com/jesusninoc/ClasesISO/blob/master/2019-09-17.md#n%C3%BAcleo
   ```PowerShell
   # Mostrar información sobre el núcleo
-  Get-CimInstance Win32_OperatingSystem | select SerialNumber
   [System.Environment]::OSVersion.Version
   wsl uname -r
+  ```
+  ```PowerShell
+  # Mostrar información sobre el núcleo mediante una función
+  function mostrarinformacion()
+  {
+      # Mostrar información sobre el núcleo
+      [System.Environment]::OSVersion.Version
+      wsl uname -r
+  }
+  mostrarinformacion
   ```
 - Arquitectura de un sistema operativo. Sistemas por lotes (batch). Sistemas por lotes con multiprogramación. Sistemas de tiempo compartido. Sistemas distribuidos.
   * https://www.jesusninoc.com/07/03/3-gestion-del-hardware-en-powershell/#Procesador
@@ -17,8 +26,21 @@
     # Mostrar la carga del procesador
      Get-WmiObject win32_processor | Select-Object LoadPercentage
     ```
+    ```PowerShell
+    function mostrarcargaprocesador()
+    {
+        # Mostrar la carga del procesador
+        Get-WmiObject win32_processor | Select-Object LoadPercentage
+    }
+    mostrarcargaprocesador
+    ```
   - Administrar la ejecución de los procesos. Planificación.
     * https://www.jesusninoc.com/07/07/7-gestion-de-procesos-en-powershell/
+    * https://github.com/jesusninoc/Scripts/blob/master/Ver%20si%20Apache%20est%C3%A1%20encendido.sh
+    * https://github.com/jesusninoc/Scripts/blob/master/Ver%20si%20MySQL%20est%C3%A1%20encendido.sh
+    * https://github.com/jesusninoc/Scripts/blob/master/Ver%20si%20Apache%20est%C3%A1%20encendido%20y%20enviar%20un%20mail.sh
+    * https://github.com/jesnino/Bash/blob/master/Procesos/EjerciciosProcesos.sh
+    
     ```PowerShell
     # Crear una carpeta con la fecha de hoy que contenga los procesos que se están ejecutando junto con información sobre los hilos (solución 1)
 
@@ -33,7 +55,8 @@
         $carpeta
         (Get-Process -Name $carpeta).Threads >> ($carpeta+"\informacion.txt")
     }
-    
+    ```
+    ```PowerShell
     # Crear una carpeta con la fecha de hoy que contenga los procesos que se están ejecutando junto con información sobre los hilos (solución 2)
 
     $fecha = (Get-Date).ToString("yyyyMMdd")
@@ -47,6 +70,39 @@
         (Get-Process -Name $carpeta).Threads >> ($carpeta+"\informacion.txt")
     }
     ```
+    ```PowerShell
+    # Crear una carpeta con la fecha de hoy que contenga los procesos que se están ejecutando junto con información sobre los hilos (solución mediante funciones)
+
+    function infohilos ($proceso)
+    {
+        # Valores que necesita: proceso
+        # Valores que devuelve: hilos
+        (Get-Process -Name $proceso).Threads >> ($proceso+"\informacion.txt")
+    }
+
+    $fecha = (Get-Date).ToString("yyyyMMdd")
+    mkdir $fecha
+    cd $fecha
+
+    foreach($proceso in (Get-Process | select Name -Unique).name)
+    {
+        $proceso
+        mkdir $proceso -force
+        infohilos $proceso
+    }
+    ```
+    ```PowerShell
+    # Arrancar un servicio
+    New-Service -Name "Tes2" -BinaryPathName '"C:\Program Files\MySQL\MySQL Server 5.1\bin\mysqld" --defaults-file="C:\Program Files\MySQL\MySQL Server 5.1\my.ini" MySQL'
+
+    Start-Service tes2
+    Stop-Service tes2
+    ```
+    ```Bash
+    # Eliminar un proceso o un servicio
+    kill -9 `pidof apache2`
+    ```
+      
   - Controlar el proceso de organización de la información. Creación, acceso (ubicación física) y borrado de archivos.
     * https://www.jesusninoc.com/07/04/4-gestion-del-sistema-de-archivos-en-powershell/#Archivos
   - Controlar el acceso de los programas o los usuarios a los recursos del sistema.
@@ -85,6 +141,7 @@
   - Ventajas e inconvenientes de la virtualización.
 - Consideraciones previas a la instalación de sistemas operativos libres y propietarios.
   - Particionado del disco duro.
+    * https://github.com/jesusninoc/ClasesISO/blob/master/2018-04-04.md
     * https://github.com/jesusninoc/ClasesISO/blob/master/2019-10-17.md#comandos-para-trabajar-con-discos-en-linux
   - En sistemas Windows determinar la partición donde instalaremos el S.O.
   - En sistemas Linux determinar las particiones para los distintos puntos de montaje.
@@ -155,7 +212,9 @@
   * https://www.jesusninoc.com/07/05/5-gestion-del-software-en-powershell/
 - Gestión de la información del sistema. Rendimiento. Estadísticas.
 - Montaje y desmontaje de dispositivos en sistemas operativos. Automatización.
+  * https://www.jesusninoc.com/07/04/4-gestion-del-sistema-de-archivos-en-powershell/#Discos
 - En sistemas Windows montar un volumen en una o más carpetas.
+  * https://www.jesusninoc.com/07/04/4-gestion-del-sistema-de-archivos-en-powershell/#Montar_un_disco_virtual
 - Herramientas de administración de discos. Particiones y volúmenes. Desfragmentación y chequeo.
 - Permisos locales de acceso a ficheros y directorios.
   * https://github.com/jesusninoc/ClasesISO/blob/master/2019-11-05.md#permisos-en-linux
@@ -164,42 +223,3 @@
   * https://github.com/jesusninoc/ClasesSOM/blob/master/2018-11-26.md
   * https://github.com/jesusninoc/ClasesSOM/blob/master/2018-11-27.md
   * https://www.jesusninoc.com/03/30/eliminar-permisos-explicitos/
-
----------------------
-
-# Realizar script de tareas básicas
-* https://github.com/jesusninoc/Scripts/blob/master/Realizar%20tareas%20b%C3%A1sicas%20y%20avanzadas.sh
-
-# Repaso de scripting
-* https://www.jesusninoc.com/07/01/1-introduccion-a-powershell/
-* https://www.jesusninoc.com/07/02/2-programacion-en-powershell/
-* https://www.jesusninoc.com/07/03/3-gestion-del-hardware-en-powershell/
-* https://www.jesusninoc.com/07/04/4-gestion-del-sistema-de-archivos-en-powershell/
-* https://www.jesusninoc.com/07/05/5-gestion-del-software-en-powershell/
-* https://www.jesusninoc.com/07/07/7-gestion-de-procesos-en-powershell/
-* https://www.jesusninoc.com/07/10/10-gestion-del-rendimiento-en-powershell/
-
-# Funciones en PowerShell
-* https://github.com/jesusninoc/ClasesISO/blob/master/2019-11-12.md#funciones-en-powershell
-
----------------------
-
-# Ejercicios propuestos (Bash, PowerShell y WSL)
-
-- Arrancar un proceso o un servicio
-  * https://www.jesusninoc.com/2017/10/17/crear-un-servicio-en-windows-con-powershell/
-```PowerShell
-New-Service -Name "Tes2" -BinaryPathName '"C:\Program Files\MySQL\MySQL Server 5.1\bin\mysqld" --defaults-file="C:\Program Files\MySQL\MySQL Server 5.1\my.ini" MySQL'
-
-Start-Service tes2
-Stop-Service tes2
-```
-- Eliminar un proceso o un servicio
-  * https://github.com/jesnino/Bash/blob/master/Procesos/EjerciciosProcesos.sh
-```Bash
-kill -9 `pidof apache2`
-```
-- Indicar si se está ejecutando o no un proceso
-  * https://github.com/jesusninoc/Scripts/blob/master/Ver%20si%20Apache%20est%C3%A1%20encendido.sh
-  * https://github.com/jesusninoc/Scripts/blob/master/Ver%20si%20MySQL%20est%C3%A1%20encendido.sh
-  * https://github.com/jesusninoc/Scripts/blob/master/Ver%20si%20Apache%20est%C3%A1%20encendido%20y%20enviar%20un%20mail.sh
