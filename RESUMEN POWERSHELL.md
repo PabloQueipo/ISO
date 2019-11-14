@@ -3,6 +3,7 @@
 - Estructura de un sistema informático. Monolítica. Jerárquica. Capas o anillos (ring). Máquinas virtuales. Cliente-servidor.
   * https://github.com/jesusninoc/ClasesISO/blob/master/2019-09-17.md#n%C3%BAcleo
   ```PowerShell
+  # Mostrar información sobre el núcleo
   Get-CimInstance Win32_OperatingSystem | select SerialNumber
   [System.Environment]::OSVersion.Version
   wsl uname -r
@@ -13,12 +14,13 @@
   - Controlar y gestionar el uso del hardware del ordenador: CPU, dispositivos de E/S, Memoria principal, tarjetas gráficas y el resto de periféricos.
     * https://www.jesusninoc.com/07/03/3-gestion-del-hardware-en-powershell
     ```PowerShell
+    # Mostrar la carga del procesador
      Get-WmiObject win32_processor | Select-Object LoadPercentage
     ```
   - Administrar la ejecución de los procesos. Planificación.
     * https://www.jesusninoc.com/07/07/7-gestion-de-procesos-en-powershell/
     ```PowerShell
-    # Crear una carpeta con la fecha de hoy que contenga los procesos que se están ejecutando junto con información sobre los mismos (hilos)
+    # Crear una carpeta con la fecha de hoy que contenga los procesos que se están ejecutando junto con información sobre los hilos (solución 1)
 
     $fecha = (Get-Date).ToString("yyyyMMdd")
     mkdir $fecha
@@ -31,14 +33,40 @@
         $carpeta
         (Get-Process -Name $carpeta).Threads >> ($carpeta+"\informacion.txt")
     }
+    
+    # Crear una carpeta con la fecha de hoy que contenga los procesos que se están ejecutando junto con información sobre los hilos (solución 2)
+
+    $fecha = (Get-Date).ToString("yyyyMMdd")
+    mkdir $fecha
+    cd $fecha
+
+    foreach($carpeta in (Get-Process | select Name -Unique).name)
+    {
+        $carpeta
+        mkdir $carpeta
+        (Get-Process -Name $carpeta).Threads >> ($carpeta+"\informacion.txt")
+    }
     ```
   - Controlar el proceso de organización de la información. Creación, acceso (ubicación física) y borrado de archivos.
-     * https://www.jesusninoc.com/07/04/4-gestion-del-sistema-de-archivos-en-powershell/#Archivos
+    * https://www.jesusninoc.com/07/04/4-gestion-del-sistema-de-archivos-en-powershell/#Archivos
   - Controlar el acceso de los programas o los usuarios a los recursos del sistema.
+  ```Bash
   ps -U root -u root u
   ps -eo user,comm
+  ```
   - Proporcionar interfaces de usuario: en modo texto y gráficos.
   - Servicios soporte: actualizaciones de software, controladores para nuevos periféricos, etc.
+    * https://www.jesusninoc.com/07/05/5-gestion-del-software-en-powershell/#Actualizaciones
+    * https://www.jesusninoc.com/07/07/7-gestion-de-procesos-en-powershell/
+    ```PowerShell
+    # Crear carpetas para cada tipo de ProviderName y dentro de cada carpeta meter los paquetes de cada ProviderName
+    
+    foreach($programa in Get-Package | select ProviderName, name)
+    {
+        mkdir $programa.ProviderName -Force
+        $programa.Name >> ($programa.ProviderName+"\informacion.txt")
+    }
+    ```
 - Tipos de sistemas operativos.
   - Monousuario o multiusuario
   - Centralizado o distribuido
@@ -55,11 +83,18 @@
   - Ventajas e inconvenientes de la virtualización.
 - Consideraciones previas a la instalación de sistemas operativos libres y propietarios.
   - Particionado del disco duro.
+    * https://github.com/jesusninoc/ClasesISO/blob/master/2019-10-17.md#comandos-para-trabajar-con-discos-en-linux
   - En sistemas Windows determinar la partición donde instalaremos el S.O.
   - En sistemas Linux determinar las particiones para los distintos puntos de montaje.
   - Controladores (drivers) de almacenamiento necesarios.
+    * https://github.com/jesusninoc/PowerShell/blob/master/Procesos/EjerciciosProcesosAvanzado.ps1
 - Instalación de sistemas operativos.
   - Requisitos hardware, versiones y licencias.
+    * https://www.jesusninoc.com/07/03/3-gestion-del-hardware-en-powershell/
+    * https://github.com/jesusninoc/ClasesISO/blob/master/2017-10-12.md
+    * https://github.com/jesusninoc/PowerShell/blob/master/Hardware/EjemplosHardware.ps1
+    * https://github.com/jesusninoc/PowerShell/blob/master/Hardware/EjemplosHardware2.ps1
+    * https://github.com/jesusninoc/ClasesISO/blob/master/2019-11-20.md#1-realizar-un-inventario-de-tu-equipo-a-nivel-hardware-y-software-ten-en-cuenta-c%C3%B3mo-clasificar-la-informaci%C3%B3n-y-no-olvides-temas-importantes-como-por-ejemplo-controladores
   - Soporte utilizado para la instalación: CD/DVD, Pendrive, LAN.
   - Datos necesarios para la instalación: usuarios, contraseñas, nombre del equipo, direcciones IP, número de licencia, etc.
 - Gestión de varios sistemas operativos en un ordenador.
