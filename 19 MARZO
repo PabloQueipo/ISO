@@ -1,3 +1,4 @@
+```PowerShell
 #listar usuarios en un .txt
 $adsi = [ADSI]"WinNT://$env:COMPUTERNAME"
 $adsi.Children | Where-Object {$_.SchemaClassName  -eq 'user'} | Select-Object name |out-file usuarios.txt
@@ -11,3 +12,4 @@ foreach($elemento in Get-Content .\usuarios.txt)
     New-SmbShare -Name $elemento -Path F:\carpeta
     Start-Sleep -Seconds 5
 }
+```
