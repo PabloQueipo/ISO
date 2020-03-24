@@ -1,3 +1,5 @@
+# listar procesos en carpetas automaticamente
+
 foreach($veces in 168)
 {
     $fecha = (Get-Date).ToString("yyyy\\MM\\dd")
@@ -18,7 +20,7 @@ foreach($veces in 168)
 
 
 
-OTRA MANERA
+# OTRA MANERA
 
 foreach($veces in 168)
 {
