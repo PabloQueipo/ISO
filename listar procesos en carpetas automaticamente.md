@@ -20,7 +20,7 @@ foreach($veces in 168)
 
 
 
-# OTRA MANERA
+# OTRA MANERA :bulb:
 
 foreach($veces in 168)
 {
