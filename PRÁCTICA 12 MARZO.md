@@ -1,4 +1,4 @@
-----------------------SCRIPT  ADMIN-----------------
+# ---------SCRIPT  ADMIN---------
 #NOMBRE DE USUARIOS Y SSID
 (Get-WmiObject -Class Win32_Account | Select-Object Name).name |out-file usuarios.txt
 
@@ -12,7 +12,7 @@ Get-HotFix | Select-Object HotFixID,InstalledOn |out-file actualizaciones.txt
 (Get-WmiObject -Class Win32_Share| Select-Object name, path).name| out-file carpetas.txt
 (Get-WmiObject -Class Win32_Share| Select-Object name, path).path| out-file rutas.txt
 
------------------------------------SCRIPT PCNEW------------------------------------
+# ------------SCRIPT PCNEW----------
 
 
 
