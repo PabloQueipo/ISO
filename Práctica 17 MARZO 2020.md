@@ -1,4 +1,4 @@
-#SCRIPT PARA LISTAR PROGRAMAS INICIADOS DESDE QUE SE ARRANCO EL PC
+# SCRIPT PARA LISTAR PROGRAMAS INICIADOS DESDE QUE SE ARRANCO EL PC
 
 Get-WmiObject win32_process | Sort-Object Processid | Select-Object Processid,Name,CommandLine |out-file programas.txt
 
