@@ -47,4 +47,4 @@ Start-Sleep -Seconds 1
 
 
 
-
+WRITELN "Este texto sale normal pero {CLASS|formateado1|este otro sale con el otro formato} y este vuelve a salir normal"
