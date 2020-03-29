@@ -35,7 +35,7 @@ foreach ($item in gc aplicaciones.txt)
 }
 ```
 ---------------------------------------------------------------------------------------------------------------------
-## CREARLO DE MANERA BONITA:
+## CREARLO DE MANERA BONITA: :boom:
 
 https://www.jmsolanes.net/es/unidades-organizativas-powershell/
 
