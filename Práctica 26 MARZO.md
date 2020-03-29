@@ -1,4 +1,5 @@
 #LISTAMOS USUARIOS EN CADA ORDENADOR :raising_hand:
+
 ´´´
 $adsi = [ADSI]"WinNT://$env:COMPUTERNAME"
 $adsi.Children | Where-Object {$_.SchemaClassName  -eq 'user'} | Select-Object name |out-file usuarios.txt
