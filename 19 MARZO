@@ -1,0 +1,13 @@
+#listar usuarios en un .txt
+$adsi = [ADSI]"WinNT://$env:COMPUTERNAME"
+$adsi.Children | Where-Object {$_.SchemaClassName  -eq 'user'} | Select-Object name |out-file usuarios.txt
+
+#crear usuarios y recurso compartido recogios del fichero anteriormente rellenado
+
+foreach($elemento in Get-Content .\usuarios.txt)
+{
+    $elemento
+    New-ADUSer -Name $elemento -Sam $elemento -Path "OU=Localizacion,DC=Dominio,DC=Local" -AccountPassword (ConvertTo-SecureString "Contraseña" -AsPlainText -force) -Enable $true
+    New-SmbShare -Name $elemento -Path F:\carpeta
+    Start-Sleep -Seconds 5
+}
