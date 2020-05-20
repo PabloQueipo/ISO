@@ -20,8 +20,8 @@ Psicología
 Relaciones con la SEA
 ALUMNOS
 ```
+Crearemos con el siguiente script:
 
-Ahora los crearemos con el siguiente script:
 ```
 foreach($departamentos in get-content C:\Users\Administrador\Desktop\Departamentos.txt)
 {
@@ -46,7 +46,7 @@ Dependiendo de los datos que queramos incluir podremos ir ampliandolo con mas ",
 -name -surname -givenname -emailaddress -samaccountname -accountpassword -displayname -department  -country  -city -Enabled  -Passthru ETC
 ```
 
-## Ahora ejecutaremos el siguiente script para crear los usuarios donde pondremos como contraseña "Usuario_nuevo1"
+## Ejecutaremos el siguiente script para crear los usuarios donde pondremos como contraseña "Usuario_nuevo1"
 ```
 foreach($elemento in get-content C:\Users\Administrador\Desktop\UsuariosEEAUTO.txt)
 {
@@ -54,7 +54,7 @@ New-ADUser -sAMAccountName $elemento.split(",")[0] -Name $elemento.split(",")[0]
 }
 ```
 
-## Ahora como dijimos anteriormente moveremos todos los usuarios al grupo de distribucción
+## Como dijimos anteriormente moveremos todos los usuarios al grupo de distribucción
 ```
 get-aduser -searchbase "OU=EEAUTO,DC=mdef,dc=es" -filter {objectclass -eq "user" } | foreach {add-adgroupmember -identity "cn=todoelpersonal,OU=EEAUTO,DC=mdef,dc=es" -Members $_}
 ```
@@ -65,8 +65,8 @@ get-aduser -searchbase "OU=EEAUTO,DC=mdef,dc=es" -filter {objectclass -eq "user"
 remove-adgroupmember –identity "cn=secretaría,OU=EEAUTO,DC=mdef,dc=es"-members María
 ```
 
-#CON ESTO YA ESTARÍA CREADA LA OU
-## Ahora vamos con las Políticas de Grupo
+ # CON ESTO YA ESTARÍA CREADA LA OU
+## Vamos con las Políticas de Grupo
 
 Para hacer otras diferentes podremos consultar esta web : https://getadmx.com/
 o descargar esta hoja de calculo: https://www.microsoft.com/en-us/download/confirmation.aspx?id=25250
@@ -92,7 +92,7 @@ New-GPO -Name "Programas" -Comment "Deshabilita instalación o desinstalación d
 Set-ItemProperty -Path HKCU\Software\Policies\Microsoft\Windows\Personalization   -Name LockScreenImage  -Value 1
 New-GPLink -Name "Programas" -Target "OU=EEAUTO,DC=mdef,DC=es"
 ```
-### La Imagen= C:\windows\web\screen\fondodepantalla.jpg
+#### La Imagen= C:\windows\web\screen\fondodepantalla.jpg
 
 ## Negar acceso al disco extraible 
 ```
@@ -107,6 +107,7 @@ New-GPO -Name "Barra de herramientas" -Comment "Deshabilita Ajuste barra de herr
 Set-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name NoMovingBands -Value 0
 New-GPLink -Name "Barra de herramientas" -Target "OU=EEAUTO,DC=mdef,DC=es"
 ```
+
 ## Deshabilitar el firewall
 ``` 
 New-GPO -Name "Firewall" -Comment "Deshabilitar el Firewall"
