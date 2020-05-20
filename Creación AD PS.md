@@ -65,8 +65,12 @@ get-aduser -searchbase "OU=EEAUTO,DC=mdef,dc=es" -filter {objectclass -eq "user"
 remove-adgroupmember –identity "cn=secretaría,OU=EEAUTO,DC=mdef,dc=es"-members María
 ```
 
- # CON ESTO YA ESTARÍA CREADA LA OU
-## Vamos con las Políticas de Grupo
+ # YA ESTARÍA CREADA LA OU
+ 
+ ---------------------------------------------------------------------------------------
+ 
+ 
+# Vamos con las Políticas de Grupo
 
 Para hacer otras diferentes podremos consultar esta web : https://getadmx.com/
 o descargar esta hoja de calculo: https://www.microsoft.com/en-us/download/confirmation.aspx?id=25250
