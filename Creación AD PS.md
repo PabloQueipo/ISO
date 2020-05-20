@@ -1,6 +1,9 @@
-# Vamos a crear una OU (unidad organizativa) a base de script de Powershell. #
-Una vez que tenemos un dominio al que llamaremos: mdef.es
+# Vamos a crear una OU (unidad organizativa) a base de script de Powershell. :office:
+
+### Una vez que tenemos un dominio al que llamaremos: mdef.es
+
 Creamos la unidad organizativa a la que llamaremos EEAUTO
+
 ```
 New-ADOrganizationalUnit -Name "EEAUTO" -Path "dc=Mdef,dc=es"
 ```
@@ -54,7 +57,7 @@ New-ADUser -sAMAccountName $elemento.split(",")[0] -Name $elemento.split(",")[0]
 }
 ```
 
-## Como dijimos anteriormente moveremos todos los usuarios al grupo de distribucción
+## Como dijimos anteriormente moveremos todos los usuarios al grupo de distribucción :busts_in_silhouette:
 ```
 get-aduser -searchbase "OU=EEAUTO,DC=mdef,dc=es" -filter {objectclass -eq "user" } | foreach {add-adgroupmember -identity "cn=todoelpersonal,OU=EEAUTO,DC=mdef,dc=es" -Members $_}
 ```
@@ -65,12 +68,14 @@ get-aduser -searchbase "OU=EEAUTO,DC=mdef,dc=es" -filter {objectclass -eq "user"
 remove-adgroupmember –identity "cn=secretaría,OU=EEAUTO,DC=mdef,dc=es"-members María
 ```
 
- # YA ESTARÍA CREADA LA OU
+
+# YA ESTARÍA CREADA LA OU :clap: :clap:
+ 
  
  ---------------------------------------------------------------------------------------
  
  
-# Vamos con las Políticas de Grupo
+# Vamos con las Políticas de Grupo :computer:	
 
 Para hacer otras diferentes podremos consultar esta web : https://getadmx.com/
 o descargar esta hoja de calculo: https://www.microsoft.com/en-us/download/confirmation.aspx?id=25250
