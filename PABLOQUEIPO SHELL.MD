@@ -98,7 +98,7 @@ La escructura es la siguiente:
 
 
 ```
- Function Mostrar-MensajeCuadroDialogo {Param
+  Function Mostrar-MensajeCuadroDialogo {Param
            ([string]$Mensaje,[string]$Titulo,[System.Windows.Forms.MessageBoxButtons]$Botones,[System.Windows.Forms.MessageBoxIcon]$Icono)
            return [System.Windows.Forms.MessageBox]::Show($Mensaje, $Titulo, $Botones, $Icono)} $dia=get-date
 CLS
@@ -510,7 +510,7 @@ Write-Host "Seleccione una opcion"
 echo "1 - Crear unidad Organizativa"
 echo "2 - Creación de grupos"
 echo "3 - Usuarios"
-echo "4 - Copiar Usuario"
+echo "4 - Copiar Usuario a Grupos"
 echo "5 - Borrar"
 echo "6 - GPO"
 <# -------- -------------#>
@@ -521,7 +521,8 @@ switch ($prue1)
      1{cls
      Write-Host "  PABLO QUEIPO SHELL"
      $NOMBREOU= READ-HOST "INTRODUZCA EL NOMBRE DE LA UNIDAD ORGANIZATIVA"
-      New-ADOrganizationalUnit -Name $NOMBREOU -Path "dc=andel,dc=local"
+     $DOMI= READ-HOST "INTRODUZCA DOMINIO DONDE QUIERE CREARLO ejemplo <DC=DOMINIO,DC=DOMINIO>"
+      New-ADOrganizationalUnit -Name $NOMBREOU -Path "$DOMI"
       Mostrar-MensajeCuadroDialogo -Mensaje "Creada Unidad Organizativa $NOMBREOU" -Titulo "Pablo Queipo SHELL $dia" -Botones OK -Icono Information
       }
      <# CREAR GRUPO#>
@@ -529,8 +530,8 @@ switch ($prue1)
        Write-Host "  PABLO QUEIPO SHELL"
        $NombreGrupo=read-host "INTRODUZCA EL NOMBRE DEL GRUPO"
        $UNIDADGRUPO=READ-HOST "DESCRIPCIÓN DEL GRUPO"
-       $RUTA=READ-HOST "INTRODUZCA EL NOMBRE DE LA OU DONDE QUIERE CREAR EL GRUPO"
-       New-ADGroup -Name $NombreGrupo -SamAccountName $NombreGrupo -GroupCategory Distribution -GroupScope Global -DisplayName $NombreGrupo -Path "OU=$RUTA,dc=andel,dc=local" -Description $UNIDADGRUPO
+       $RUTA=READ-HOST "INTRODUZCA EL NOMBRE DE LA OU y RUTA DONDE QUIERE CREAR EL GRUPO ejemplo <OU=UNIDAD ORGANIZATIVA,DC=DOMINIO,DC=DOMINIO>"
+       New-ADGroup -Name $NombreGrupo -SamAccountName $NombreGrupo -GroupCategory Distribution -GroupScope Global -DisplayName $NombreGrupo -Path "$RUTA" -Description $UNIDADGRUPO
        Mostrar-MensajeCuadroDialogo -Mensaje "Creado Grupo $NombreGrupo" -Titulo "Pablo Queipo SHELL $dia" -Botones OK -Icono Information
        }
      <# CREAR USUARIO#>
@@ -541,15 +542,15 @@ switch ($prue1)
               $Telefono=Read-Host "Telefono"
               $Ciudad=Read-Host "Ciudad"
               $Contraseña=Read-Host "Contraseña"
-              New-ADUser -sAMAccountName $nameuser -Name $nameuser -DisplayName $nameuser -Surname $surnameuser -fax 9163726932 -Mobile $Telefono -Country ES -City $Ciudad -Path "OU=EEAUTO,DC=andel,DC=local" -PasswordNeverExpires $true -AccountPassword (ConvertTo-SecureString $Contraseña -AsPlainText -force) -Enabled $true
+              $ruta=read-host "Introduzca ruta donde quiere crearlo ejemplo <OU=UNIDAD ORGANIZATIVA,DC=DOMINIO,DC=DOMINIO>"
+              New-ADUser -sAMAccountName $nameuser -Name $nameuser -DisplayName $nameuser -Surname $surnameuser -fax 9163726932 -Mobile $Telefono -Country ES -City $Ciudad -Path "$ruta" -PasswordNeverExpires $true -AccountPassword (ConvertTo-SecureString $Contraseña -AsPlainText -force) -Enabled $true
               Mostrar-MensajeCuadroDialogo -Mensaje "Usuario creado $BORRAROU" -Titulo "Pablo Queipo SHELL $dia" -Botones OK -Icono Information
              
        }
        <# COPIAR USUARIOS  #>
-       4{$ous=read-host "INTRODUZCA LA OU"
-         $USER=READ-HOST "INTRODUZCA NOMBRE DE USUARIO"
-         $dest=read-host "RUTA DESTINO ejemplo: cn=<nombredegrupo>,dc=<nombredeou>"
-       get-aduser -searchbase "OU=$OUS,DC=andel,dc=local" -filter {objectclass -eq $USER } | foreach {add-adgroupmember -identity "$dest,DC=andel,dc=local" -Members $_}}
+       4{   $nombregrupo=read-host "INTRODUZCA NOMBRE DEL GRUPO DESTINO"
+            $USER=READ-HOST "INTRODUZCA NOMBRE DEL USUARIO"
+            add-adgroupmember –identity $nombregrupo –members $USER}
      
       <# BORRAR#>
       5{ cls
@@ -582,8 +583,8 @@ switch ($prue1)
             Remove-ADOrganizationalUnit -Identity $BORRAROU
             Mostrar-MensajeCuadroDialogo -Mensaje "Borrada OU $BORRAROU" -Titulo "Pablo Queipo SHELL $dia" -Botones OK -Icono Hand 
             } 
-            5{$elimi=read-host "NOMBRE DE LA OU"
-            Get-ADOrganizationalUnit -Identity "OU=$elimi,dc=andel,dc=local" |
+            5{$elimi=read-host "NOMBRE DE LA OU y dominio ejemplo <OU=UNIDAD ORGANIZATIVA,DC=DOMINIO,DC=DOMINIO>"
+            Get-ADOrganizationalUnit -Identity "$elimi" |
             Set-ADObject -ProtectedFromAccidentalDeletion:$false -PassThru }
             }
        }
@@ -610,14 +611,14 @@ switch ($prue1)
                     switch ($ELI)
                         {
                         1{CLS
-                          $desnot=read-host	"INTRODUZCA OU"
-                         Get-GPInheritance "OU=$desnot,DC=andel,DC=local"}
+                          $desnot=read-host	"INTRODUZCA OU y Dominio ejemplo <OU=UNIDAD ORGANIZATIVA,DC=DOMINIO,DC=DOMINIO>"
+                         Get-GPInheritance "$desnot"}
                         2{cls
-                            $HERENCIA=READ-HOST "NOMBRE DE LA OU"
+                            $HERENCIA=READ-HOST "NOMBRE DE LA OU y Dominio ejemplo <OU=UNIDAD ORGANIZATIVA,DC=DOMINIO,DC=DOMINIO>"
                             echo "1 - si"
                             echo "0 - no"
                             $heren= Read-Host "INTRODUZCA 1 O 2"
-                            Set-GPInheritance -Target "ou=$HERENCIA,dc=andel,dc=local" -IsBlocked $heren
+                            Set-GPInheritance -Target "$HERENCIA" -IsBlocked $heren
                             Mostrar-MensajeCuadroDialogo -Mensaje "Herencia $heren" -Titulo "Pablo Queipo SHELL $dia" -Botones OK -Icono Information}
                         }
                         
@@ -625,7 +626,8 @@ switch ($prue1)
                 2{
                   cls
             $forza= Read-Host "Yes or No"
-            Set-GPLink -Name "Default Domain Policy" -Target "dc=andel,dc=local" -Enforced $forza
+            $domini=Read-host "INTRODUZCA DOMINIO ejemplo <DC=DOMINIO,DC=DOMINIO>"
+            Set-GPLink -Name "Default Domain Policy" -Target "$domini" -Enforced $forza
             Mostrar-MensajeCuadroDialogo -Mensaje "Forzar $forza" -Titulo "Pablo Queipo SHELL $dia" -Botones OK -Icono Information    
                  }
                 3 {cls
@@ -640,33 +642,33 @@ switch ($prue1)
                     switch ($opcion2)
                     {
                     1{ 
-                     $desup=Read-Host "NOMBRE DE LA OU"
+                     $desup=Read-Host "NOMBRE DE LA OU y dominio ejemplo <OU=UNIDAD ORGANIZATIVA,DC=DOMINIO,DC=DOMINIO>"
                      New-GPO -Name "Windows Update" -Comment "Deshabilita Windows update"
                      Set-ItemProperty -Path HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate -Name DisableWindowsUpdateAccess -Value 1
-                     New-GPLink -Name "Windows Update" -Target "OU=$desup,DC=andel,DC=local"
+                     New-GPLink -Name "Windows Update" -Target "$desup"
                      Mostrar-MensajeCuadroDialogo -Mensaje "Ha deshabilitado Windows update de $desup" -Titulo "Pablo Queipo SHELL $dia" -Botones OK -Icono Information
                      }
                     2{
-                    $desdef=read-host "NOMBRE DE LA OU"
+                    $desdef=read-host "NOMBRE DE LA OU y Dominio ejemplo <OU=UNIDAD ORGANIZATIVA,DC=DOMINIO,DC=DOMINIO>"
                     New-GPO -Name "Windows Defender" -Comment "Deshabilita Windows Defender Antivirus"
                     Set-GPRegistryValue -Name "Windows Defender" -Key "HKLM\Software\Policies\Microsoft\Windows Defender" -ValueName DisableAntiSpyware -Type DWord -Value 1
-                    New-GPLink -Name "Windows Defender" -Target "OU=$desdef,DC=andel,DC=local"
+                    New-GPLink -Name "Windows Defender" -Target "$desdef"
                     Mostrar-MensajeCuadroDialogo -Mensaje "Ha deshabilitado Windows Defender de $desdef" -Titulo "Pablo Queipo SHELL $dia" -Botones OK -Icono Information
                     }
                    3{ 
-                    $descor=Read-host "Nombre de la OU"
+                    $descor=Read-host "Nombre de la OU y dominio ejemplo <OU=UNIDAD ORGANIZATIVA,DC=DOMINIO,DC=DOMINIO>"
                     New-GPO -Name "Cortana" -Comment "Deshabilita las funciones de Cortana"
                     Set-GPRegistryValue -Name "Cortana" -Key "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -ValueName AllowCortana -Type DWord -Value 0
                     Set-GPRegistryValue -Name "Cortana" -Key "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -ValueName AllowCortanaAboveLock -Type DWord -Value 0
                     Set-GPRegistryValue -Name "Cortana" -Key "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -ValueName AllowSearchToUseLocation -Type DWord -Value 0
-                    New-GPLink -Name "Cortana" -Target "OU=$descor,DC=andel,DC=local"
+                    New-GPLink -Name "Cortana" -Target "$descor"
                     Mostrar-MensajeCuadroDialogo -Mensaje "Ha deshabilitado las funciones de Cortana de $descor" -Titulo "Pablo Queipo SHELL $dia" -Botones OK -Icono Information
                     }
                    4{
-                    $desini=read-host "Nombre de la OU"
+                    $desini=read-host "Nombre de la OU y Dominio ejemplo <OU=UNIDAD ORGANIZATIVA,DC=DOMINIO,DC=DOMINIO>"
                     New-GPO -Name "Animación de inicio" -Comment "Deshabilita la animación del primer inicio de sesión"
                     Set-GPRegistryValue -Name "Animación de inicio" -Key "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -ValueName EnableFirstLogonAnimation -Type DWord -Value 0
-                    New-GPLink -Name "Animación de inicio" -Target "OU=$desini,DC=andel,DC=local"
+                    New-GPLink -Name "Animación de inicio" -Target "$desini"
                     Mostrar-MensajeCuadroDialogo -Mensaje "Ha deshabilitado la animación de $desini" -Titulo "Pablo Queipo SHELL $dia" -Botones OK -Icono Information
                    }
                    5{
@@ -678,29 +680,29 @@ switch ($prue1)
                     switch ($opcion3)
                     {
                          1{ 
-                          $desnot=Read-Host "Nombre de la OU"
+                          $desnot=Read-Host "Nombre de la OU y Dominio ejemplo <OU=UNIDAD ORGANIZATIVA,DC=DOMINIO,DC=DOMINIO>"
                           New-GPO -Name "Notificaciones equipo" -Comment "Deshabilita las notificaciones"
                           Set-GPRegistryValue -Name "Notificaciones equipo" -Key "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications" -ValueName DisableNotifications -Type DWord -Value 1
-                          New-GPLink -Name "Notificaciones equipo" -Target "OU=$desnot,DC=andel,DC=local"
+                          New-GPLink -Name "Notificaciones equipo" -Target "$desnot"
 
                           New-GPO -Name "Notificaciones usuario" -Comment "Deshabilita las notificaciones"
                           Set-GPRegistryValue -Name "Notificaciones usuario" -Key "HKCU\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications" -ValueName NoToastApplicationNotification -Type DWord -Value 1
                           Set-GPRegistryValue -Name "Notificaciones usuario" -Key "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -ValueName TaskbarNoNotification -Type DWord -Value 1
                           Set-GPRegistryValue -Name "Notificaciones usuario" -Key "HKCU\Software\Policies\Microsoft\Windows\Explorer" -ValueName DisableNotificationCenter -Type DWord -Value 1
-                          New-GPLink -Name "Notificaciones usuario" -Target "OU=$desnot,DC=andel,DC=local"
+                          New-GPLink -Name "Notificaciones usuario" -Target "$desnot"
                           Mostrar-MensajeCuadroDialogo -Mensaje "Ha deshabilitado las notificaciones de $desnot" -Titulo "Pablo Queipo SHELL $dia" -Botones OK -Icono Information
                            }
                          2{
-                         $desnot=Read-Host "Nombre de la OU"
+                         $desnot=Read-Host "Nombre de la OU y dominio ejemplo <OU=UNIDAD ORGANIZATIVA,DC=DOMINIO,DC=DOMINIO>"
                          New-GPO -Name "Notificaciones equipo" -Comment "habilita las notificaciones"
                          Set-GPRegistryValue -Name "Notificaciones equipo" -Key "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications" -ValueName DisableNotifications -Type DWord -Value 0
-                         New-GPLink -Name "Notificaciones equipo" -Target "OU=$desnot,DC=andel,DC=local"
+                         New-GPLink -Name "Notificaciones equipo" -Target "$desnot"
 
                         New-GPO -Name "Notificaciones usuario" -Comment "habilita las notificaciones"
                         Set-GPRegistryValue -Name "Notificaciones usuario" -Key "HKCU\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications" -ValueName NoToastApplicationNotification -Type DWord -Value 0
                         Set-GPRegistryValue -Name "Notificaciones usuario" -Key "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" -ValueName TaskbarNoNotification -Type DWord -Value 0
                         Set-GPRegistryValue -Name "Notificaciones usuario" -Key "HKCU\Software\Policies\Microsoft\Windows\Explorer" -ValueName DisableNotificationCenter -Type DWord -Value 0
-                        New-GPLink -Name "Notificaciones usuario" -Target "OU=$desnot,DC=andel,DC=local"
+                        New-GPLink -Name "Notificaciones usuario" -Target "$desnot"
                         Mostrar-MensajeCuadroDialogo -Mensaje "Ha habilitado las notificaciones de $desnot" -Titulo "Pablo Queipo SHELL $dia" -Botones OK -Icono Information
                          }
                        }
@@ -716,8 +718,8 @@ switch ($prue1)
                    }
                 }
                 4{$gpna=read-host "INTRODUZCA NOMBRE DE GPO"
-                $RUT=read-host "INTRODUZCA RUTA ejemplo <OU=EEAUTO>"
-                New-GPLink -Name $gpna -Target "$RUT,DC=andel,DC=local" }
+                $RUT=read-host "INTRODUZCA RUTA ejemplo <OU=UNIDAD ORGANIZATIVA,DC=DOMINIO,DC=DOMINIO>"
+                New-GPLink -Name $gpna -Target "$RUT" }
                 5{Get-Gpo -All}
                 6{$gpos=read-host "INTRODUZCA NOMBRE DE LA GPO"
                   Get-GPPermission -Name $gpos -All }
@@ -804,7 +806,7 @@ switch ($prue1)
      echo "2 - LOCALIZACIÓN CPU"
      echo "3 - TIEMPO CLIMATOLÓGICO"
      echo "4 - SINTETIZADOR DE VOZ"
-    
+     echo "5 - OBTENER INFORMACION WLAN"
      $PROGa = Read-Host
         cls
       switch ($PROGa)
@@ -834,8 +836,22 @@ switch ($prue1)
                Add-Type -AssemblyName System.speech 
                $narrador = New-Object System.Speech.Synthesis.SpeechSynthesizer 
                $narrador.Speak("$sinteti")}
-            
-         }
+            5{ cls
+                Write-Host "  PABLO QUEIPO SHELL"
+                Write-Host "Seleccione una opcion"
+                echo "1 - DISPOSITIVOS A LOS QUE HA SIDO CONECTADO SU PC"
+                echo "2 - OBTENER INFORMACION /CONTRASEÑA"
+                $PROGa = Read-Host
+                cls
+                switch ($PROGa)
+                { 
+                    1{netsh wlan show profile}
+                    2{$DISPO=read-host "INTRODUZCA DISPOSITIVO"
+                    netsh wlan show profile name=$DISPO key=clear
+                    write-host "La contraseña debe aparecer en el apartado- Contenido de la clave"}
+                 }
+            }
+        }
 }
    <# ------------------------------------------------ FIN COSITAS ------------------------------------------------------------------#>
            <#----------------------------------------------------- SALIR -------------------------------------------------------------#>
