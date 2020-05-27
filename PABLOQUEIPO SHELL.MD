@@ -70,7 +70,7 @@ La escructura es la siguiente:
 #### Crear unidad Organizativa
 #### Creación de grupos
 #### Usuarios
-#### Copiar Usuario
+#### Copiar Usuario A GRUPOS
 #### Borrar
 #### GPO
 
@@ -90,6 +90,7 @@ La escructura es la siguiente:
 #### LOCALIZACIÓN CPU
 #### TIEMPO CLIMATOLÓGICO
 #### SINTETIZADOR DE VOZ
+#### OBTENER INFORMACIÓN WLAN
 
 
 ## Salir
