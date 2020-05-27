@@ -580,10 +580,10 @@ switch ($prue1)
             Mostrar-MensajeCuadroDialogo -Mensaje "Borrado Grupo $BORRARGRUPO" -Titulo "Pablo Queipo SHELL $dia" -Botones OK -Icono Hand 
              }
             4{
-            $BORRAROU=READ-HOST "NOMBRE DE LA OU QUE QUIERE BORRAR"
-            Remove-ADOrganizationalUnit -Identity $BORRAROU
+            $BORRAROU=READ-HOST "NOMBRE DE LA OU Y Dominio ejemplo <OU=UNIDAD ORGANIZATIVA,DC=DOMINIO,DC=DOMINIO>" 
+            Remove-ADOrganizationalUnit -Identity "$BORRAROU" -Recursive
             Mostrar-MensajeCuadroDialogo -Mensaje "Borrada OU $BORRAROU" -Titulo "Pablo Queipo SHELL $dia" -Botones OK -Icono Hand 
-            } 
+            }  
             5{$elimi=read-host "NOMBRE DE LA OU y dominio ejemplo <OU=UNIDAD ORGANIZATIVA,DC=DOMINIO,DC=DOMINIO>"
             Get-ADOrganizationalUnit -Identity "$elimi" |
             Set-ADObject -ProtectedFromAccidentalDeletion:$false -PassThru }
