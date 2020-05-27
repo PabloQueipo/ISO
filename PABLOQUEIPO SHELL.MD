@@ -1,6 +1,6 @@
 He creado un script con un resumen de lo dado en la Asignatura de ISO (ASIR1)
 La escructura es la siguiente: 
- (En el apartado del directorio activo, esta configurado como que el dominio es ANDEL.LOCAL)
+ (En el apartado del directorio activo, habra que usar las rutasa como se mostrara [ou=NOMBREOU,DC=DOMINIO,DC=DOMINIO])
 
 ## PROCESOS DEL SISTEMA
 
