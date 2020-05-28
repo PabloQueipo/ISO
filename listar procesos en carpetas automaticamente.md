@@ -1,5 +1,5 @@
 # listar procesos en carpetas automaticamente
-
+```PowerShell
 foreach($veces in 168)
 {
     $fecha = (Get-Date).ToString("yyyy\\MM\\dd")
@@ -14,14 +14,14 @@ foreach($veces in 168)
 
     Start-Sleep -Seconds 3600
 }
-
+```
 
 
 
 
 
 # OTRA MANERA :bulb:
-
+```PowerShell
 foreach($veces in 168)
 {
     [String]$mes = (get-date).Month
@@ -46,3 +46,4 @@ foreach($veces in 168)
        
     }
 }
+```
