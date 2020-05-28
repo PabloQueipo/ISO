@@ -98,7 +98,7 @@ La escructura es la siguiente:
 
 
 
-```
+```Powershell
 while(1){
   Function Mostrar-MensajeCuadroDialogo {Param
            ([string]$Mensaje,[string]$Titulo,[System.Windows.Forms.MessageBoxButtons]$Botones,[System.Windows.Forms.MessageBoxIcon]$Icono)
