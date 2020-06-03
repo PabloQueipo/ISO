@@ -99,7 +99,7 @@ La escructura es la siguiente:
 
 
 ```Powershell
-while(1){
+
   Function Mostrar-MensajeCuadroDialogo {Param
            ([string]$Mensaje,[string]$Titulo,[System.Windows.Forms.MessageBoxButtons]$Botones,[System.Windows.Forms.MessageBoxIcon]$Icono)
            return [System.Windows.Forms.MessageBox]::Show($Mensaje, $Titulo, $Botones, $Icono)} $dia=get-date
@@ -864,6 +864,6 @@ Write-Host "  PABLO QUEIPO SHELL"
     
     <# -------------------------------------------------------------FIN DIRECTORIO ACTIVO------------------------------------------------- #>
     }
-    }
+    
     ```
     
