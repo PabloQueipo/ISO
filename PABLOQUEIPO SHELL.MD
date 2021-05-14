@@ -414,7 +414,7 @@ switch ($pruebax)
              Get-NetIPAddress}
             5{cls
             Write-Host "Seleccione una opcion"
-             echo "1 - DIRECCIONES IPV6"
+             echo "1 - DIRECCIONES IPV4"
              echo "2 - DIRECCIONES IPV6"
             $IPV = Read-Host
             switch ($IPV)
